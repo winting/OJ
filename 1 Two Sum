@@ -1,0 +1,16 @@
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        std::map<int,int> dict;
+        int len = nums.size();
+        for(int i=0;i<len;i++)
+        {
+            int toFind=target-nums[i];
+            auto iter=dict.find(toFind);
+            if(iter!=dict.end())
+                return vector<int> {iter->second,i};
+            dict.insert(make_pair(nums[i],i));
+        }
+        return vector<int> {};
+    }
+};
