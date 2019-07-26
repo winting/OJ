@@ -1,0 +1,57 @@
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        if(x<0)
+            return false;
+        stack<int> s;
+        queue<int> q;
+        int step=1;
+        while(x/step>=10)
+        {
+            step*=10;            
+        }
+        while(step>0)
+        {
+            s.push(x/step);
+            q.push(x/step);
+            x=x-x/step*step;
+            step/=10;
+        }
+        while(!s.empty())
+        {
+            if(s.top()!=q.front())
+                return false;
+            s.pop();
+            q.pop();
+        }
+        return true;
+    }
+};
+
+
+
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        if(x<0)
+            return false;
+        stack<int> s;
+        queue<int> q;
+        int step=1;
+        while(x/step>=10)
+        {
+            step*=10;            
+        }
+        while(step>0)
+        {
+            int first=x/step;
+            int last=x%10;
+            if(first!=last)
+                return false;
+            x=x-first*step-last;
+            x=x/10;
+            step/=100;            
+        }
+        return true;
+    }
+};
