@@ -35,8 +35,6 @@ public:
     bool isPalindrome(int x) {
         if(x<0)
             return false;
-        stack<int> s;
-        queue<int> q;
         int step=1;
         while(x/step>=10)
         {
