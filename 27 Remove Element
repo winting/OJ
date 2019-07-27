@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        int len=nums.size();
+        int Idx=0;
+        int curIdx=0;
+        while(Idx<len)
+        {
+            if(nums[Idx]==val)
+                Idx++;
+            else
+                nums[curIdx++]=nums[Idx++];
+        }
+        return curIdx;
+    }
+};
