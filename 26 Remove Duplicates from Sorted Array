@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int len=nums.size();
+        if(len<=1)
+            return len;
+        int curIdx=1;
+        int Idx=1;
+        int current=nums[0];
+        while(Idx<len)
+        {
+            if(nums[Idx]==current)
+                Idx++;
+            else
+            {
+                nums[curIdx++]=nums[Idx++];
+                current=nums[curIdx-1];
+            }
+        }
+        return curIdx;
+    }
+};
