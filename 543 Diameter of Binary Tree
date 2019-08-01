@@ -1,0 +1,53 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int diameterOfBinaryTree(TreeNode* root) {
+        if(root==NULL)
+            return 0;
+        if(root->left==NULL && root->right==NULL)
+            return 0;
+        int maxV=0;
+        Travel(root,maxV);
+        return maxV;
+        
+    }
+    vector<int> Travel(TreeNode* root, int &maxV)
+    {
+        if(root->left==NULL && root->right==NULL)
+            return vector<int> {0,0};
+        if(root->left==NULL)
+        {
+            vector<int> rightV=Travel(root->right,maxV);
+            int right=max(rightV[0],rightV[1])+1;
+            if(right>maxV)
+                maxV=right;
+            return vector<int> {0,right};
+        }
+        if(root->right==NULL)
+        {
+            vector<int> leftV=Travel(root->left,maxV);
+            int left=max(leftV[0],leftV[1])+1;
+            if(left>maxV)
+                maxV=left;
+            return vector<int> {left,0};
+        }else
+        {            
+            vector<int> leftV=Travel(root->left,maxV);
+            int left=max(leftV[0],leftV[1])+1;            
+            vector<int> rightV=Travel(root->right,maxV);
+            int right=max(rightV[0],rightV[1])+1;
+            if(left+right>maxV)
+                maxV=left+right;
+            return vector<int> {left,right};
+                
+        }
+    }
+};
