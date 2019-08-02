@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        map<string,int> dict;
+        vector<vector<string>> res;
+        int len=0;
+        for(int i=0;i<strs.size();i++)
+        {
+            string tmp=strs[i];
+            sort(tmp.begin(),tmp.end());
+            auto iter=dict.find(tmp);
+            if(iter==dict.end())
+            {
+                dict.insert(make_pair(tmp,len++));
+                res.push_back(vector<string> {strs[i]});
+            }else
+            {
+                res[iter->second].push_back(strs[i]);
+            }
+        }
+        reverse(res.begin(),res.end());
+        for(int i=0;i<res.size();i++)
+        {
+            sort(res[i].begin(),res[i].end());
+        }
+        return res;
+    }
+};
