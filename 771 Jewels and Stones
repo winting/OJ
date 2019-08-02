@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int numJewelsInStones(string J, string S) {
+        set<char> Jewels;
+        for(int i=0;i<J.size();i++)
+        {
+            if(Jewels.find(J[i])==Jewels.end())
+                Jewels.insert(J[i]);
+        }
+        int sum=0;
+        for(int i=0;i<S.size();i++)
+        {
+            if(Jewels.find(S[i])!=Jewels.end())
+                sum++;
+        }
+        return sum;
+    }
+};
