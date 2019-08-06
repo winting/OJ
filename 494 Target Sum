@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int findTargetSumWays(vector<int>& nums, int S) {
+        return findTargetIndex(nums,0,0,S);
+    }
+    
+    int findTargetIndex(vector<int>& nums, int index, int sum, int S)
+    {
+        if(index==nums.size())
+        {
+            if(sum==S)
+                return 1;
+            else
+                return 0;
+        }
+        return findTargetIndex(nums, index+1, sum+nums[index], S)+
+            findTargetIndex(nums, index+1, sum-nums[index], S);
+    }
+};
