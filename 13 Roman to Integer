@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int romanToInt(string s) {
+        map<char,int> dict;
+        dict.insert(make_pair('I',1));
+        dict.insert(make_pair('V',5));
+        dict.insert(make_pair('X',10));
+        dict.insert(make_pair('L',50));
+        dict.insert(make_pair('C',100));
+        dict.insert(make_pair('D',500));
+        dict.insert(make_pair('M',1000));
+        int len=s.length();
+        if(len==0)
+            return 0;
+        int sum=0;
+        for(int i=0;i<len;i++)
+        {
+            auto iter1=dict.find(s[i]);
+            if(i+1<len)
+            {
+                auto iter2=dict.find(s[i+1]);
+                if(iter1->second<iter2->second){
+                    sum-=iter1->second;
+                    continue;
+                }
+            }
+            sum+=iter1->second;
+        }
+        return sum;
+    }
+};
