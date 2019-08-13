@@ -1,0 +1,74 @@
+class Solution {
+     int count;
+     bool valid;
+public:
+    int numDecodings(string s) {
+        valid=true;
+        int len=s.length();
+        count=0;
+        if(len==0||s[0]=='0')
+            return 0;
+        ways(s,0,len);
+        if(!valid)
+            return 0;
+        else
+            return count;
+    }
+    
+    void ways(string &s, int start, int len)
+    {            
+        if(start==len)
+            return;
+        if(s[start]=='0')
+        {
+            if(start>0&&s[start-1]=='0'||s[start-1]>='3')
+            {
+                valid=false;
+            }
+            return;
+        }
+        if(start==len-1)
+        {
+            if(s[start]!='0')               
+                count++;
+            return;
+        }
+        if(start==len-2)
+        {
+            if(s[start+1]=='0'&&s[start]>='3')
+            {
+                valid=false;
+                return;
+            }else if(s[start+1]=='0'&&(s[start]=='1'||s[start]=='2'))
+            {
+                count++;
+                return;
+            }else if(s[start]=='1'|| (s[start]=='2'&&s[start+1]<='6'&&s[start+1]>='1'))
+            {
+                count+=2;
+                return;
+            }else
+            {
+                count++;
+                return;
+            }
+        }
+        if(s[start+1]=='0'&&s[start]>='3')
+            {
+                valid=false;
+                return;
+            }else if(s[start+1]=='0'&&(s[start]=='1'||s[start]=='2'))
+            {
+                ways(s,start+2,len);
+                return;
+            }else if(s[start]=='1'|| (s[start]=='2'&&s[start+1]<='6'&&s[start+1]>='1'))
+            {
+                ways(s,start+1,len);
+                ways(s,start+2,len);
+            }else
+        {
+            ways(s,start+1,len);
+        }        
+    }
+       
+};
