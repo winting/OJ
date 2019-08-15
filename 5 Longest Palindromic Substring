@@ -1,0 +1,55 @@
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        int len=s.length();
+        if(len<=1)
+            return s;
+        int centerL=0;        
+        int centerR=0;
+        int radius=0;
+        int start=0;
+        int right=0;
+        for(int i=0;i<len;i++)
+        {
+            int j=i+1;
+            for(;j<len;j++)
+            {
+                if(s[j]!=s[i])
+                    break;
+            }
+            
+            //take s[i] as center or the leftest one
+            int step=1;
+            while(i-step>=0&&j-1+step<=len-1)
+            {
+                if(s[i-step]==s[j-1+step])
+                {
+                    step++;
+                    continue;
+                }else
+                    break;
+            }
+            if((step-1)*2+j-i>radius*2+centerR-centerL+1)
+            {
+                centerL=i;
+                centerR=j-1;
+                radius=step-1;
+            }
+            // same string
+            if(j-1-i>right)
+            {
+                start=i;
+                right=j-1;
+            }
+        }
+        string s1;
+        string s2;
+        for(int i=centerL-radius;i<=centerR+radius;i++)
+            s1+=s[i];
+        for(int i=start;i<=right;i++)
+            s2+=s[i];
+        if(s1.length()>=s2.length())
+            return s1;
+        return s2;        
+    }
+};
