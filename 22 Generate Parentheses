@@ -1,0 +1,35 @@
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> res;
+        if(n<1)
+            return res;
+        generate(n,n,res,"");
+        return res;
+    }
+    void generate(int left, int right, vector<string> &res, string tmp)
+    {
+        if(left==0)
+        {
+            string t=tmp;
+            while(right)
+            {
+                t+=')';
+                right--;
+            }
+            res.push_back(t);
+            return;
+        }
+        if(left>0){      
+            tmp+='(';
+            generate(left-1,right,res,tmp);
+            tmp.pop_back();
+        }
+        if(right>0 && right>left)
+        {
+            tmp+=')';            
+            generate(left,right-1,res,tmp);
+            tmp.pop_back();
+        }
+    }
+};
