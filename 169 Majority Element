@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int len=nums.size();
+        if(len==1)
+            return nums[0];
+        int time=len/2;
+        map<int,int> dict;
+        for(int i=0;i<len;i++)
+        {
+            auto iter=dict.find(nums[i]);
+            if(iter==dict.end())
+            {
+                dict.insert(make_pair(nums[i],1));
+            }else
+            {
+                iter->second++;
+                if(iter->second>time)
+                    return iter->first;
+            }
+        }
+        return -1;
+    }
+};
