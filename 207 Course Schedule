@@ -1,0 +1,56 @@
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        if(numCourses<=1)
+            return true;
+        if(prerequisites.size()==0)
+            return true;
+        int cur=0;
+        vector<bool> v(numCourses,false);
+        return canF(numCourses,prerequisites,cur,v);
+    }
+    
+    bool canF(int numCourses,vector<vector<int>>& prerequisites, int &cur, vector<bool> &v)
+    {
+        if(cur>=numCourses)
+            return true;
+        
+        set<int> dict;
+        set<int> remove;
+        int len =prerequisites.size();
+        for(int i=0;i<len;i++)
+        {
+            if(dict.find(prerequisites[i][0])==dict.end())
+                dict.insert(prerequisites[i][0]);
+        }
+        
+        if(dict.size()==numCourses-cur)
+            return false;
+        
+        for(int i=0;i<numCourses;i++)
+        {
+            if(dict.find(i)==dict.end()&&v[i]==false)
+            {
+                cur++;
+                v[i]=true;
+                remove.insert(i);
+            }
+        }
+        
+        if(cur>=numCourses)
+            return true;
+        //Remove in prerequisties
+        for(auto it=remove.begin();it!=remove.end();it++)
+        {
+            for(auto ele=prerequisites.begin();ele!=prerequisites.end();)
+            {
+                if((*ele)[1]==*it)
+                {
+                    ele=prerequisites.erase(ele);
+                }else
+                    ele++;
+            }
+        }
+        return canF(numCourses, prerequisites, cur,v);
+    }
+};
