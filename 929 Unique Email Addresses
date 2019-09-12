@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int numUniqueEmails(vector<string>& emails) {
+        int len=emails.size();
+        if(len<=1)
+            return len;
+        set<string> dict;
+        for(int i=0;i<len;i++)
+        {
+            string tmp="";
+            int j=0;
+            bool afterAt=false;
+            while(j<emails[i].size())
+            {
+               if(emails[i][j]=='@')
+               {
+                   tmp+=emails[i][j++];
+                   afterAt=true;
+                   continue;
+               }else if(emails[i][j]=='.')
+               {
+                   if(afterAt)
+                   {
+                       tmp+=emails[i][j++];
+                       continue;
+                   }else
+                   {
+                       j++;
+                       continue;
+                   }
+               }else if(emails[i][j]=='+')
+               {
+                   while(emails[i][j]!='@')
+                       j++;
+                   continue;
+               }else
+               {
+                   tmp+=emails[i][j++];
+                   continue;
+               }
+            }
+            dict.insert(tmp);
+        }
+        return dict.size();
+    }
+};
