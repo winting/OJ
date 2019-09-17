@@ -14,13 +14,13 @@ public:
             return true;
         if(root&& root->left==NULL && root->right==NULL)
             return true;
-        deque<TreeNode*> q;
-        q.push_back(root);
+        queue<TreeNode*> q;
+        q.push(root);
         bool firstNull=false;
         while(q.size()>0)
         {
             TreeNode* tmp=q.front();
-            q.pop_front();
+            q.pop();
             if(tmp==NULL)
             {
                 if(!firstNull)
@@ -29,8 +29,8 @@ public:
             {
                 if(firstNull)
                     return false;
-                q.push_back(tmp->left);
-                q.push_back(tmp->right);
+                q.push(tmp->left);
+                q.push(tmp->right);
             }                        
         }
         return true;
