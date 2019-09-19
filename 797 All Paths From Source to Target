@@ -1,0 +1,47 @@
+class Solution {
+public:
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
+    vector<vector<int>> res;
+
+    int n = graph.size();
+    if (n < 1 || graph[0].size() == 0)
+        return res;
+    for (int i = 0; i < graph[0].size(); i++)
+    {
+        res.push_back(vector<int>());
+        res[i].push_back(0);
+        res[i].push_back(graph[0][i]);
+    }
+
+    while (true)
+    {
+        bool flag = true;
+        for (int i = res.size() - 1; i >= 0; i--)
+        {
+            int len = res[i].size();
+            int last = res[i][len - 1];
+            if (last != n - 1) {
+                flag = false;
+                if (graph[last].size() == 0)
+                {
+                    res.erase(res.begin() + i);
+                }
+                else
+                {
+                    for (int j = 0; j < graph[last].size(); j++)
+                    {
+                        res.push_back(res[i]);
+                        int cur = res.size();
+                        res[cur - 1].push_back(graph[last][j]);
+                    }
+                    res.erase(res.begin() + i);
+
+                }
+            }
+        }
+        if (flag)
+            break;
+    }
+    return res;
+}
+};
