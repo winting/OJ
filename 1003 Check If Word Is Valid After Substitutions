@@ -1,0 +1,46 @@
+class Solution {
+public:
+    bool isValid(string S) {
+        if(S.size()<=2)
+            return false;
+        auto found = S.find("abc");
+        while(found!= std::string::npos)
+        {
+            S.erase(found,3);
+            found=S.find("abc");
+        }
+        return S.size()==0;
+    }
+};
+
+
+class Solution {
+public:
+    bool isValid(string S) {
+        if(S.size()<=2)
+            return false;
+        stack<string> re;
+        for(int i=0;i<S.size();i++)
+        {
+            if(S[i]=='a')
+            {
+                re.push("a");
+                continue;
+            }else if(S[i]=='b')
+            {
+                if(re.empty()||re.top()!="a")
+                    return false;
+                re.top()="ab";
+                continue;                
+            }else if(S[i]=='c')
+            {
+                if(re.empty()||re.top()!="ab")
+                    return false;
+                re.pop();
+                continue;
+            }else
+                return false;
+        }
+        return re.empty();
+    }
+};
