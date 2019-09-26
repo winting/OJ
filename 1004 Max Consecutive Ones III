@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int clumsy(int N) {
+        if(N<=2)
+            return N;
+        int ans=0;
+        bool flag=true;
+        while(N>=1)
+        {
+            int tmp=N*(N-1>=1?N-1:1)/(N-2>=1?N-2:1);
+            if(flag)
+                ans+=tmp;
+            else
+                ans-=tmp;
+            flag=false;
+            if(N-3>=1)
+                ans+=N-3;
+            N=N-4;
+        }
+        return ans;
+    }
+    
+};
