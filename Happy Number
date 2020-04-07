@@ -1,0 +1,58 @@
+Write an algorithm to determine if a number n is "happy".
+
+A happy number is a number defined by the following process: 
+Starting with any positive integer, replace the number by the sum of the squares of its digits, 
+and repeat the process until the number equals 1 (where it will stay), or it loops endlessly in a cycle which does not include 1.
+Those numbers for which this process ends in 1 are happy numbers.
+
+Return True if n is a happy number, and False if not.
+
+Example: 
+
+Input: 19
+Output: true
+Explanation: 
+12 + 92 = 82
+82 + 22 = 68
+62 + 82 = 100
+12 + 02 + 02 = 1
+
+Solution: idea is to cache all the number we have calculated before in a hash-set, 
+and if later we calculate with that number again, we just break the while condition and return false.
+
+class Solution {
+public:
+    bool isHappy(int n) {
+        if(n<=0)
+            return false;
+        
+        set<int> dict;
+        bool found=false;
+        int total = squares(n);
+        while(total!=1)
+        {
+            if(dict.find(total)!=dict.end())
+            {
+                found=true;
+                break;
+            }
+            dict.insert(total);
+            total=squares(total);
+        }
+        if(found)
+            return false;
+        return true;        
+    }
+    
+    int squares(int n)
+    {
+        int total=0;
+        while(n!=0)
+        {
+            int digit = n%10;
+            n=n/10;
+            total+=digit*digit;
+        }
+        return total;
+    }
+};
