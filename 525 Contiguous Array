@@ -1,0 +1,54 @@
+Given a binary array, find the maximum length of a contiguous subarray with equal number of 0 and 1.
+
+Example 1:
+Input: [0,1]
+Output: 2
+Explanation: [0, 1] is the longest contiguous subarray with equal number of 0 and 1.
+Example 2:
+Input: [0,1,0]
+Output: 2
+Explanation: [0, 1] (or [1, 0]) is a longest contiguous subarray with equal number of 0 and 1.
+Note: The length of the given binary array will not exceed 50,000.
+
+
+class Solution {
+public:
+    int findMaxLength(vector<int>& nums) {
+        // the idea is to sum the value, take '0' as -1
+        // when it sums to zero, the longth of subarray is index-0+1(start index)
+        // and if two sum equals, means the subarrary between them has equal number of '0' and '1'
+        // length is index-previous_index(stored in hashmap)
+        map<int,int> dict;
+        int max=0;
+        int sum=0;
+        for(int i=0;i<nums.size();i++)
+        {
+            if(nums[i]==0)
+            {
+                sum-=1;
+            }
+            else
+            {
+                sum+=1;
+            }
+            
+            if(sum==0)
+            {
+                max=i+1>max?i+1:max;
+            }
+            else
+            {
+                auto found=dict.find(sum);
+                if(found!=dict.end())
+                {
+                    max=i-found->second>max?i-found->second:max;
+                }
+                else
+                {
+                    dict.insert(make_pair(sum,i));
+                }
+            }
+        }
+        return max;
+    }
+};
