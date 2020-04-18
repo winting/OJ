@@ -1,0 +1,164 @@
+Valid Parenthesis String
+Solution
+Given a string containing only three types of characters: '(', ')' and '*', write a function to check whether this string is valid. We define the validity of a string by these rules:
+
+Any left parenthesis '(' must have a corresponding right parenthesis ')'.
+Any right parenthesis ')' must have a corresponding left parenthesis '('.
+Left parenthesis '(' must go before the corresponding right parenthesis ')'.
+'*' could be treated as a single right parenthesis ')' or a single left parenthesis '(' or an empty string.
+An empty string is also valid.
+Example 1:
+Input: "()"
+Output: True
+Example 2:
+Input: "(*)"
+Output: True
+Example 3:
+Input: "(*))"
+Output: True
+Note:
+The string size will be in the range [1, 100].
+
+The idea is simple, to check how many '*' need to be borrowed by '(' or ')'.
+Steps:
+
+go over the string to get the count of each character.
+Calculte the gap between '(' and ')' to see how many '*' needed to be borrowed
+if need to take '*' as '(', shoulde take the earliest ones showing in the string
+if need to take '*' as ')', shoulde take the last ones appearing in the string
+since cannot guarantee the squence, like example below:
+(*))((***
+left parenthesis count: 3
+right parenthesis count: 2
+asterisk (star) count: 4
+gap: 3-2 =1, need to borrow 1 '*' to right parenthesis.
+However if take the last '*' as ')' and let the other two '*' act as empty string, this will return false, but the example is a valid match.
+So divend the left asterisk symbols into 2 part, give 1 part to '(' and the other part to ‘)’
+(4-1)/2 = 1.
+We still got 1 '*' symbol left, that one will be empty string.
+
+Ok, here is the code with comment
+
+class Solution {
+public:
+    bool checkValidString(string s) {
+        if(s.size()==0)
+            return true;
+        
+        int leftCount=0;
+        int rightCount=0;
+        int starCount=0;
+        bool leftIsMore=true; // the count of '(' is more than the count of ')'
+        
+        for(int i=0;i<s.size();i++) // go first round to calculate the count
+        {
+            if(s[i]=='(')
+                leftCount++;
+            else if(s[i]==')')
+                rightCount++;
+            else
+                starCount++;
+        }
+        
+        int gap = leftCount-rightCount; // calculate how many need to be borrowed
+        
+        if(gap> 0&& gap>starCount) // the star symbol is less than the gap
+        {
+            return false;
+        }
+        if(gap<0 && ((-1)*gap > starCount))
+        {
+            return false;
+        }
+        
+        if(gap<0)  // calculate how many to become '(' and how many to become ')'
+        {
+            leftIsMore=false;
+            gap*=-1;
+        }
+        
+        int becomeLeft = (starCount-gap)/2; //these '*' will become '('
+        int becomeRight = becomeLeft; //these '*' will become ')'
+        int becomeEmpty = starCount-becomeLeft-becomeRight-gap; // 1 or 0 '*' will become empty string
+        
+        int inStack=0; // Don't need a real stack, just make sure '(' is there when next char is ')'
+        for(int i=0;i<s.size();i++) //second round to check
+        {
+            if(s[i]=='(')
+            {
+                inStack++;
+            }
+            else if(s[i]==')')
+            {
+                if(inStack==0)
+                    return false;
+                else
+                    inStack--;
+            }
+            else
+            {
+                // the sequence when handling '*' is (1) transform to '(', (2) empty string, (3)transform to ')'
+                if(leftIsMore) 
+                {
+                    if(becomeLeft>0)
+                    {
+                        inStack++;
+                        becomeLeft--;
+                    }
+                    else if(becomeEmpty>0)
+                    {
+                        becomeEmpty --;
+                    }
+                    else if(gap>0)
+                    {
+                        if(inStack==0)
+                            return false;
+                        else
+                        {
+                            inStack--;
+                            gap--;
+                        }
+                    }
+                    else if(becomeRight>0)
+                    {
+                        if(inStack==0)
+                            return false;
+                        else
+                        {
+                            inStack--;
+                            becomeRight--;
+                        }
+                    }
+                }
+                else  // the count of ')' is more than '('
+                {
+                    if(gap>0)
+                    {
+                        inStack++;
+                        gap--;
+                    }
+                    else if(becomeLeft>0)
+                    {
+                        inStack++;
+                        becomeLeft--;
+                    }
+                    else if(becomeEmpty>0)
+                    {
+                        becomeEmpty--;
+                    }
+                    else if(becomeRight>0)
+                    {
+                        if(inStack==0)
+                            return false;
+                        inStack--;
+                        becomeRight--;
+                    }
+                }
+            }
+        }
+        
+        if(inStack>0) // make sure the count is even
+            return false;
+        return true;
+    }
+};
