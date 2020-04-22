@@ -1,0 +1,66 @@
+Given a 2D binary matrix filled with 0's and 1's, find the largest square containing only 1's and return its area.
+
+Example:
+
+Input: 
+
+1 0 1 0 0
+1 0 1 1 1
+1 1 1 1 1
+1 0 0 1 0
+
+Output: 4
+
+Solution: once meet '1' take current dimension as 0, and try to extend the dimension
+
+class Solution {
+public:
+    int maximalSquare(vector<vector<char>>& matrix) {
+        int row = matrix.size();
+        if(row==0)
+            return 0;
+        int col = matrix[0].size();
+        if(col==0)
+            return 0;
+        int res=-1;
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                if(matrix[i][j]=='1')
+                {
+                    res=max(res,0);
+                    isMatrix(matrix,i,j,0,res,row,col);
+                }
+            }
+        }
+        return (res+1)*(res+1);
+    }
+    
+    void isMatrix(vector<vector<char>>& matrix, int x, int y, int curDim, int& res, int row, int col)
+    {
+        if(x+curDim+1<row && y+curDim+1<col)
+        {
+            for(int i=y;i<y+curDim+1;i++)
+            {
+                if(matrix[x+curDim+1][i]!='1')
+                {
+                    return;
+                }
+            }
+            for(int i=x;i<x+curDim+1;i++)
+            {
+                if(matrix[i][y+curDim+1]!='1')
+                {
+                    return;
+                }
+            }
+            if(matrix[x+curDim+1][y+curDim+1]!='1')
+                return;
+            
+            res=max(res,curDim+1);
+            isMatrix(matrix,x,y,curDim+1,res,row,col);
+        }
+        return;
+    }
+};
