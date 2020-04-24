@@ -1,0 +1,52 @@
+Given a char array representing tasks CPU need to do. It contains capital letters A to Z where different letters represent different tasks. Tasks could be done without original order. Each task could be done in one interval. For each interval, CPU could finish one task or just be idle.
+
+However, there is a non-negative cooling interval n that means between two same tasks, there must be at least n intervals that CPU are doing different tasks or just be idle.
+
+You need to return the least number of intervals the CPU will take to finish all the given tasks.
+
+ 
+
+Example:
+
+Input: tasks = ["A","A","A","B","B","B"], n = 2
+Output: 8
+Explanation: A -> B -> idle -> A -> B -> idle -> A -> B.
+
+Solution: Greedy
+/* 
+	E.g. A,A,A,B,B,B n = 2
+	(  )(  )    + count
+	A** A**     + AB
+	|__|
+*/
+Explanation:
+
+n+1 because we have A** that is idle time + 1 for the task itself or in other words the size of one window
+maxFrequency - 1 because this window is repeated maxFrequency - 1 times
+and total number of maxFrequency characters is added as shown above or size of last window which won't have the constraint as no repeats
+In case this sum is less than total number of elements, we will be able to optimally place n elements in n places
+The sorting and erasing is not necesary, I was trying something else initially
+
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        vector<int> dict (26,0);
+        int count=0;
+        int res=0;
+        for(int i=0;i<tasks.size();i++)
+        {
+            dict[tasks[i]-'A']++;
+        }
+        sort(dict.rbegin(),dict.rend());
+        for(int i=0;i<26;i++)
+        {
+            if(dict[i]==dict[0])
+                count++;
+            else if(dict[i]==0)
+                break;
+        }
+        res = count+(dict[0]-1)*(n+1);
+        res = res>tasks.size()?res:tasks.size();
+        return res;
+    }
+};
