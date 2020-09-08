@@ -1,0 +1,70 @@
+A string S of lowercase English letters is given. We want to partition this string into as many parts as possible so that each letter appears in at most one part, and return a list of integers representing the size of these parts.
+
+ 
+
+Example 1:
+
+Input: S = "ababcbacadefegdehijhklij"
+Output: [9,7,8]
+Explanation:
+The partition is "ababcbaca", "defegde", "hijhklij".
+This is a partition so that each letter appears in at most one part.
+A partition like "ababcbacadefegde", "hijhklij" is incorrect, because it splits S into less parts.
+ 
+
+Note:
+
+S will have length in range [1, 500].
+S will consist of lowercase English letters ('a' to 'z') only.
+
+
+class Solution {
+public:
+    vector<int> partitionLabels(string S) {
+        vector<int> res;
+        int left_idx=0;
+        for(;left_idx<S.size();)
+        {
+            int right_idx=S.size()-1;
+            for(;right_idx>=left_idx;right_idx--)
+            {
+                if(S[right_idx]==S[left_idx])
+                {
+                    break;
+                }
+            }
+            if(left_idx==right_idx)
+            {
+                res.push_back(1);
+                left_idx++; // one letter partition
+            }
+            else
+            {
+                set<char> dict;
+                dict.insert(S[left_idx]);
+                for(int i=left_idx+1;i<right_idx;i++)
+                {
+                    if(dict.find(S[i])==dict.end())
+                    {
+                        int j=S.size()-1;
+                        for(;j>right_idx;j--)
+                        {
+                            if(S[j]==S[i])
+                            {
+                                break;
+                            }
+                        }
+                        if(j>right_idx)
+                        {
+                            right_idx=j;
+                        }
+                        dict.insert(S[i]);
+                    }
+                }
+                res.push_back(right_idx-left_idx+1);
+            }
+            left_idx=right_idx+1;
+        }
+        return res;
+    }
+};
