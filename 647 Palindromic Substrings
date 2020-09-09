@@ -1,0 +1,55 @@
+Given a string, your task is to count how many palindromic substrings in this string.
+
+The substrings with different start indexes or end indexes are counted as different substrings even they consist of same characters.
+
+Example 1:
+
+Input: "abc"
+Output: 3
+Explanation: Three palindromic strings: "a", "b", "c".
+ 
+
+Example 2:
+
+Input: "aaa"
+Output: 6
+Explanation: Six palindromic strings: "a", "a", "a", "aa", "aa", "aaa".
+ 
+
+Note:
+
+The input string length won't exceed 1000.
+
+
+class Solution {
+public:
+    int countSubstrings(string s) {
+    // s[i][j] is substring start i end j
+    int len = s.size();
+    if (len <= 1)
+        return len;
+    vector<vector<bool>> dict(len, vector<bool>(len, false));
+    int res = 0;
+    for (int i = 0; i < len; i++)
+        dict[i][i] = true;
+    res += len;
+    for (int j = 1; j < len; j++)
+    {
+        for (int i = 0; i < j; i++)
+        {
+            if (i==j-1 && dict[i][j - 1] && s[i] == s[j])  //next to each other, be careful of this, if don't add "i=j-1" may result in calculate twice
+            {
+                dict[i][j] = true;
+                res++;
+                continue;
+            }
+            if (dict[i+1][j-1] && s[i] == s[j])
+            {
+                 dict[i][j] = true;
+                 res++;
+            }
+        }
+    }
+    return res;
+  }
+};
